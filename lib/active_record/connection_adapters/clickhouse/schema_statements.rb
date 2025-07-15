@@ -195,10 +195,12 @@ module ActiveRecord
           @lock.synchronize do
             @connection.post("/?#{request_params.merge(settings).to_param}", formatted_sql, {
               'User-Agent' => "Clickhouse ActiveRecord #{ClickhouseActiverecord::VERSION}",
-              'Content-Type' => 'application/x-www-form-urlencoded',
+              'Content-Type' => 'text/plain',
             })
           end
         end
+
+        # application/x-www-form-urlencoded
 
         def apply_format(sql, format)
           format ? "#{sql} FORMAT #{format}" : sql
