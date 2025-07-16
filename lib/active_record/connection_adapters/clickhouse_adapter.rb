@@ -556,7 +556,6 @@ module ActiveRecord
       private
 
       def connect
-        puts "@connection_parameters:#{@connection_parameters.inspect}"
         @connection = @connection_parameters[:connection] || Net::HTTP.start(@connection_parameters[:host], @connection_parameters[:port], use_ssl: @connection_parameters[:ssl], verify_mode: OpenSSL::SSL::VERIFY_NONE)
 
         @connection.ca_file = @connection_parameters[:ca_file] if @connection_parameters[:ca_file]

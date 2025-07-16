@@ -121,10 +121,10 @@ module ActiveRecord
           log(sql, "#{adapter_name} #{name}") do
             retries = 2
             begin
-              puts "sql:#{sql}"
+              debug_clickhouse "sql:#{sql}"
               res = request(sql, format, settings)
             rescue EOFError, Errno::ECONNRESET
-              puts "clickhouse:EOFError"
+              debug_clickhouse "clickhouse:EOFError"
               retry if (retries -= 1) > 0 # rubocop:disable Style/NumericPredicate
             end
             process_response(res, format, sql)
@@ -185,13 +185,11 @@ module ActiveRecord
         def request(sql, format = nil, settings = {})
           formatted_sql = apply_format(sql, format)
           request_params = @connection_config || {}
-          puts "-------post url--------------"
-          puts "/?#{request_params.merge(settings).to_param}"
-          puts "#####################"
+          debug_clickhouse "POST URL: /?#{request_params.merge(settings).to_param}"
+          debug_clickhouse "#####################"
 
-          puts "-------formatted_sql--------------"
-          puts "#{formatted_sql}"
-          puts "#####################"
+          debug_clickhouse "formatted_sql: #{formatted_sql}"
+          debug_clickhouse "#####################"
           @lock.synchronize do
             @connection.post("/?#{request_params.merge(settings).to_param}", formatted_sql, {
               'User-Agent' => "Clickhouse ActiveRecord #{ClickhouseActiverecord::VERSION}",

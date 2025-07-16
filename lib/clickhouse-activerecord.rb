@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+def debug_clickhouse(message)
+  if ENV['DEBUG_CLICKHOUSE']
+    puts message
+  end
+end
+
 require 'active_record/connection_adapters/clickhouse_adapter'
 
 require 'core_extensions/active_record/internal_metadata'
